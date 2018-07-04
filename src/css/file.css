@@ -1,0 +1,13 @@
+#toolbar {
+    background: #dedede;
+    height: 34px;
+    padding-top: 9px;
+}
+#current-filepath {
+    border: 1px solid rgb(158, 190, 238);
+    padding: 5px;
+    height: 12px;
+    color: #333;
+    margin-left:20px;
+    width: 200px;
+}
