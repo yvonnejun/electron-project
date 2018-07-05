@@ -14,7 +14,7 @@ app.on('window-all-close', ()=>{
 })
 app.on('ready', ()=>{
     // autoUpdater.checkForUpdates();
-    mainWindow = new BrowserWindow();           // 实例化窗口对象
+    mainWindow = new BrowserWindow({ width: 1200, height: 600, show: true });           // 实例化窗口对象,注意这里的show控制窗口显示隐藏，show:true窗口显示，反之false则隐藏
     // mainWindow.loadURL(`file://${app.getAppPath()}/index.html`);      // 加载主入口文件index.html,测试demo用
     mainWindow.loadURL(`file://${app.getAppPath()}/src/apps/file.html`);      // 加载file.html,开发文件系统用
     mainWindow.on('close', ()=>{

@@ -1,6 +1,7 @@
 'use strict'
 
 const os = require('osenv');
+const async = require('async');
 const path = require("path")
 const fs = require("fs")
 

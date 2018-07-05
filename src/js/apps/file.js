@@ -18,12 +18,39 @@ function main() {
         if (err) {
             return alert('load user home dir faild!')
         } 
-        files.forEach((file) => {
-            console.log(`${filepath}\\${file}`) // forEach遍历打印出C:\Users\user\.electron这样的路径字串
-        });
+        inspectAndDescribeFiles(filepath, files, displayFiles); // 处理文件的核心函数
     })
 }
-
+function inspectAndDescribeFiles(folderPath, files, callback) {
+    async.map(files, (file, asyncCallback) => {
+        let resolvedFilePath = path.resolve(folderPath, file);
+        inspectAndDescribeFile(resolvedFilePath, asyncCallback);
+    }, callback)
+}
+function inspectAndDescribeFile(filepath, callback) { // 定义判断是文件还是文件夹的方法
+    let result = {
+        file: path.basename(filepath),
+        path: filepath,
+        type: ''
+    }
+    fs.stat(filepath, (err, stat) => {
+        if (err) {
+            callback(err)
+        }else {
+            if (stat.isFile()) {
+                result.type = 'file'
+            }else if (stat.isDirectory()) {
+                result.type = 'directory'
+            }
+            callback(err, result)
+        }
+    })
+}
+function displayFiles(err, files) { // 让回调函数(即渲染函数)来显示文件列表
+    files.forEach((file) => {
+        console.log(`${filepath}\\${file}`) // forEach遍历打印出C:\Users\user\.electron这样的路径字串
+    });
+}
 main();
 
 
