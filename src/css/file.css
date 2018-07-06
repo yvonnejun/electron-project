@@ -2,6 +2,7 @@
     background: #dedede;
     height: 34px;
     padding-top: 9px;
+    position: fixed;
 }
 #current-filepath {
     border: 1px solid rgb(158, 190, 238);
@@ -10,4 +11,23 @@
     color: #333;
     margin-left:20px;
     width: 200px;
+}
+#main-area {
+    clear: both;
+    margin: 2em;
+    margin-top: 3em;
+    z-index: 1;
+}
+.item {
+    position: relative;
+    float: left;
+    padding: 1em;
+    margin: 1em;
+    width: 6em;
+    height: 6em;
+    text-align: center;
+}
+.item .filename {
+    padding-top: 1em;
+    font-size: 10pt;
 }

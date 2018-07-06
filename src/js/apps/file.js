@@ -2,7 +2,8 @@
 
 // const os = require('osenv');
 const path = require("path")
-
+const async = require('async');
+const fs = require("fs")
 const common = require(path.resolve(__dirname, '../js/common/common.js'));
 
 
@@ -48,7 +49,36 @@ function inspectAndDescribeFile(filepath, callback) { // 定义判断是文件�
 }
 function displayFiles(err, files) { // 让回调函数(即渲染函数)来显示文件列表
     files.forEach((file) => {
+        console.info(file) // 能循环打印出含文件类型和路径名称的对象信息
         console.log(`${filepath}\\${file}`) // forEach遍历打印出C:\Users\user\.electron这样的路径字串
+        // 获取渲染区域对象和模板对象
+        const mainArea = document.getElementById('main-area');
+        const template = document.getElementById('item-template');
+
+        /**
+         * document.importNode介绍--importNode() 方法把一个节点从另一个文档复制到该文档以便应用。
+         * imported 节点可以试试任何节点类型。
+         * 例如：把iframe窗口页面中的一个DOM节点复制到当前页面中就用这个方法
+         * 复制iframe中第一个 H1 元素:
+         * var frame=document.getElementsByTagName("iframe")[0]
+         * var h=frame.contentWindow.document.getElementsByTagName("h1")[0];
+         * var x=document.importNode(h,true);
+         * 语法：document.importNode(node,deep)
+         * 参数：deep	Boolean	必须。如果为 true，还要递归复制 importedNode 节点的所有子孙节点。
+         * 总结：就是copy节点DOM的一个方法
+         * 
+         *  注意：Internet explorer 8 及 IE 更早版本不支持该方法。
+        */
+
+        // 深拷贝--clone模板
+        let clone = document.importNode(template.content, true);
+
+        // 填充clone到本页面中的节点模板的图标和文件名信息
+        clone.querySelector('img').src = `../images/${file.type}.svg`;
+        clone.querySelector('.filename').innerHTML = file.file;
+
+        // 追加到main-area中显示
+        mainArea.appendChild(clone);
     });
 }
 main();

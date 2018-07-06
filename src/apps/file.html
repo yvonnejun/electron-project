@@ -9,12 +9,23 @@
     <link rel="stylesheet" href="../css/file.css" type="text/css">
 </head>
 <body>
+   
     <div id="toolbar">
         <div id="current-filepath">
 
         </div>
     </div>
+    <!-- main-area用来实际显示文件列表信息 -->
+    <div id="main-area">
+
+    </div>
 <script src="../js/apps/file.js"></script>
+<template id="item-template">
+    <div class="item">
+        <img src="" alt="" class="icon">
+        <div class="filename"></div>
+    </div>
+</template>
 </body>
 
 </html>
