@@ -6,47 +6,10 @@ const async = require('async');
 const fs = require("fs")
 const common = require(path.resolve(__dirname, '../js/common/common.js'));
 
-
 // 把用户目录的路径写进Dom框中
 const filepath = common.getUserHome();
 document.querySelector('#current-filepath').innerHTML = filepath;
 
-
-// 获取个人目录中的文件或文件夹信息列表
-function main() {
-    common.readDir(filepath, (err, files) => {
-        // console.log(files); // files会以数组的形式把文件名都输出来
-        if (err) {
-            return alert('load user home dir faild!')
-        } 
-        inspectAndDescribeFiles(filepath, files, displayFiles); // 处理文件的核心函数
-    })
-}
-function inspectAndDescribeFiles(folderPath, files, callback) {
-    async.map(files, (file, asyncCallback) => {
-        let resolvedFilePath = path.resolve(folderPath, file);
-        inspectAndDescribeFile(resolvedFilePath, asyncCallback);
-    }, callback)
-}
-function inspectAndDescribeFile(filepath, callback) { // 定义判断是文件还是文件夹的方法
-    let result = {
-        file: path.basename(filepath),
-        path: filepath,
-        type: ''
-    }
-    fs.stat(filepath, (err, stat) => {
-        if (err) {
-            callback(err)
-        }else {
-            if (stat.isFile()) {
-                result.type = 'file'
-            }else if (stat.isDirectory()) {
-                result.type = 'directory'
-            }
-            callback(err, result)
-        }
-    })
-}
 function displayFiles(err, files) { // 让回调函数(即渲染函数)来显示文件列表
     files.forEach((file) => {
         console.info(file) // 能循环打印出含文件类型和路径名称的对象信息
@@ -74,24 +37,64 @@ function displayFiles(err, files) { // 让回调函数(即渲染函数)来显示
         let clone = document.importNode(template.content, true);
 
         // 填充clone到本页面中的节点模板的图标和文件名信息
-        clone.querySelector('img').src = `../images/${file.type}.svg`;
+        // 将文件或文件夹信息渲染到页面上，并用不同的图标表示出来
+        clone.querySelector('img').src = `../images/${file.type}.svg`; // file:///D:/E/my-project/electron-demo/src/images/directory.svg
         clone.querySelector('.filename').innerHTML = file.file;
+
+        // 为文件夹绑定双击事件
+        if (file.type == 'directory') {
+            clone.querySelector('img').addEventListener('dblclick', () => {
+                loadDirectory(file.path)();
+            }, false); // false是指事件冒不冒泡
+        }
 
         // 追加到main-area中显示
         mainArea.appendChild(clone);
     });
 }
-main();
+// 修改当前文件夹中的路径，并更新主区域中的内容
+function loadDirectory(folderPath) {
+    return function (window) {
+        // if (!document)
+        //     document = window.document; 
+        document.querySelector('#current-filepath').innerHTML = folderPath;
+        common.readDir(folderPath, (err, files) => {
+            // 先清除整个目录显示内容
+            common.clearView('main-area');
+
+            // console.log(files); // files会以数组的形式把文件名都输出来
+
+            if (err) {
+                return alert('load user home dir faild!')
+            } 
+            common.inspectAndDescribeFiles(folderPath, files, displayFiles); // 处理文件的核心函数
+        });
+
+    }
+}
+
+// 获取个人目录中的文件或文件夹信息列表
+function main() {
+    // common.readDir(filepath, (err, files) => { // 这一部分放到了loadDirectory里面
+    //     // console.log(files); // files会以数组的形式把文件名都输出来
+    //     if (err) {
+    //         return alert('load user home dir faild!')
+    //     } 
+    //     common.inspectAndDescribeFiles(filepath, files, displayFiles); // 处理文件的核心函数
+    // })
+    loadDirectory(filepath);
+}
+
+window.onload = main;
 
 
 
 
 
 
-// 使用fs.stat函数判断是文件还是文件夹
 
 
-// 使用async模块来处理一系列异步函数的情况并收集它们的结果
 
 
-// 将文件或文件夹信息渲染到页面上，并用不同的图标表示出来
+
+

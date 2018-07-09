@@ -1,22 +1,23 @@
 #toolbar {
-    background: #dedede;
+    background: #fff;
     height: 34px;
-    padding-top: 9px;
+    padding-top: 6px;
     position: fixed;
+    width: 100%;
+    z-index: 999;
 }
 #current-filepath {
-    border: 1px solid rgb(158, 190, 238);
+    border: 1px solid rgb(215, 190, 238);
     padding: 5px;
     height: 12px;
     color: #333;
-    margin-left:20px;
-    width: 200px;
+    margin-left:31px;
+    width: 87%;
 }
 #main-area {
-    clear: both;
-    margin: 2em;
-    margin-top: 3em;
     z-index: 1;
+    position: relative;
+    top: 33px;
 }
 .item {
     position: relative;
